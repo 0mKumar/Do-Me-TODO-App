@@ -12,9 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TaskDetailsActivity">
-
+        <activity
+            android:name=".TasksActivity"
+            android:label="@string/title_activity_tasks"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".TaskDetailsActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

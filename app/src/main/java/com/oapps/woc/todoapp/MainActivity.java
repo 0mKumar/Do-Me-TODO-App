@@ -4,9 +4,12 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.oapps.woc.todoapp.UI.MainAdapter;
+import com.oapps.woc.todoapp.UI.TextWithDrawableData;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -16,10 +19,14 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
+    MainAdapter mainAdapter;
+    ArrayList<TextWithDrawableData> listElements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +34,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        recyclerView = findViewById(R.id.main_recycler);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        listElements = new ArrayList<>();
+        initializeMainList();
+        mainAdapter = new MainAdapter(this, listElements);
+        recyclerView.setAdapter(mainAdapter);
+    }
+
+    void initializeMainList(){
+        listElements.add(new TextWithDrawableData("Today", R.drawable.ic_whatshot_24dp));
+        listElements.add(new TextWithDrawableData("Work", R.drawable.ic_work_24dp));
+        listElements.add(new TextWithDrawableData("Home", R.drawable.ic_home_24dp));
+        listElements.add(new TextWithDrawableData("Pending", R.drawable.ic_assignment_late_24dp));
+        listElements.add(new TextWithDrawableData("Snoozed", R.drawable.ic_snooze_24dp));
     }
 
 
@@ -51,53 +74,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-}
-
-class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private String[] mDataset;
-
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView textView;
-        public MyViewHolder(TextView v) {
-            super(v);
-            textView = v;
-        }
-    }
-
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(String[] myDataset) {
-        mDataset = myDataset;
-    }
-
-    // Create new views (invoked by the layout manager)
-    @Override
-    public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
-        // create a new view
-//        TextView v = (TextView) LayoutInflater.from(parent.getContext())
-//                .inflate(R.layout.my_text_view, parent, false);
-
-//        MyViewHolder vh = new MyViewHolder(v);
-        return null;// vh
-    }
-
-    // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.textView.setText(mDataset[position]);
-
-    }
-
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return mDataset.length;
     }
 }

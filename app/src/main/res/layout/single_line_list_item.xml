@@ -5,12 +5,14 @@
     <ImageView
         android:layout_width="24dp"
         android:layout_margin="16dp"
+        android:id="@+id/imageView"
         android:src="@drawable/ic_today_24dp"
         android:tint="#444"
         android:layout_height="24dp"/>
     <TextView
         android:layout_gravity="center_vertical"
         android:text="First Element"
+        android:id="@+id/textView"
         android:textColor="@android:color/primary_text_light"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
