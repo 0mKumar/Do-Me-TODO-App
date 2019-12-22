@@ -1,19 +1,42 @@
 package com.oapps.woc.todoapp;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.speech.RecognizerIntent;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.oapps.woc.todoapp.DB.TaskData;
+import com.oapps.woc.todoapp.DB.ToDoViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class TasksActivity extends AppCompatActivity {
+
+    final int requestCodeForVoiceInput = 101;
+    LinearLayout bottomTakeTask;
+    EditText taskEditText;
+    FloatingActionButton fab;
+    private ToDoViewModel todoViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +47,69 @@ public class TasksActivity extends AppCompatActivity {
         Intent incomingIntent = getIntent();
         toolbar.setTitle(incomingIntent.getStringExtra("title"));
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        todoViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(ToDoViewModel.class);
+
+        todoViewModel.repository.getAllTasks().observe(this, new Observer<List<TaskData>>() {
             @Override
-            public void onClick(View view) {
+            public void onChanged(List<TaskData> taskData) {
+                Log.d("MyToDo", taskData.size() + " is curr size");
+            }
+        });
+
+        ImageView voiceInput = findViewById(R.id.voice_input);
+        voiceInput.setOnClickListener(view -> {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Add Task");
+            try {
+                startActivityForResult(intent, requestCodeForVoiceInput);
+            } catch (ActivityNotFoundException a) {
 
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        bottomTakeTask = findViewById(R.id.bottom_task_layout);
+        fab = findViewById(R.id.fab);
+        taskEditText = findViewById(R.id.take_task_edit);
+
+        taskEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() == 0) {
+                    voiceInput.setVisibility(View.VISIBLE);
+                } else if (voiceInput.getVisibility() == View.VISIBLE) {
+                    voiceInput.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        fab.setOnClickListener(view -> {
+            fab.hide();
+            bottomTakeTask.setVisibility(LinearLayout.VISIBLE);
+            taskEditText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(taskEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+        ImageView addTaskButton = findViewById(R.id.add_task_button);
+        addTaskButton.setOnClickListener(view -> {
+            TaskData data = new TaskData();
+            data.title = taskEditText.getText().toString();
+            todoViewModel.repository.insertTask(data);
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -43,12 +120,47 @@ public class TasksActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (bottomTakeTask.getVisibility() == View.VISIBLE) {
+            bottomTakeTask.setVisibility(View.GONE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(taskEditText.getWindowToken(), 0);
+            }
+            fab.show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
+//        bottomTakeTask.setVisibility(View.GONE);
         onBackPressed();
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case requestCodeForVoiceInput:
+                if (data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (result != null && result.size() > 0) {
+                        String voiceInput = result.get(0);
+                        if (voiceInput.length() > 0) {
+                            voiceInput = voiceInput.substring(0, 1).toUpperCase() + voiceInput.substring(1);
+                        }
+                        taskEditText.setText(voiceInput);
+                    }
+                }
+                taskEditText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.showSoftInput(taskEditText, InputMethodManager.SHOW_IMPLICIT);
+                }
+                taskEditText.setSelection(taskEditText.getText().length());
+                break;
+        }
     }
 }

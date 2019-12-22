@@ -48,13 +48,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainCategoryListViewHolder
     public void onBindViewHolder(MainCategoryListViewHolder holder, final int position) {
         holder.textView.setText(mDataset.get(position).text);
         holder.imageView.setImageResource(mDataset.get(position).drawable);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, TasksActivity.class);
-                intent.putExtra("title", mDataset.get(position).text);
-                context.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, TasksActivity.class);
+            intent.putExtra("title", mDataset.get(position).text);
+//            Bundle options = ActivityOptionsCompat.makeScaleUpAnimation(
+//                    holder.itemView, 0, 0,
+//                    holder.itemView.getWidth(),
+//                    holder.itemView.getHeight()).toBundle();
+//            context.startActivity(intent, options);
+            context.startActivity(intent);
         });
     }
 

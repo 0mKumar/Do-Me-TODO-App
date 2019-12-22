@@ -15,6 +15,7 @@
         <activity
             android:name=".TasksActivity"
             android:label="@string/title_activity_tasks"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

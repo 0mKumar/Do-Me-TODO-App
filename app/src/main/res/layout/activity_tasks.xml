@@ -21,7 +21,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
+    <include
+        android:id="@+id/bottom_task_layout"
+        android:visibility="invisible"
+        layout="@layout/bottom_take_task"
+        android:layout_gravity="bottom"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

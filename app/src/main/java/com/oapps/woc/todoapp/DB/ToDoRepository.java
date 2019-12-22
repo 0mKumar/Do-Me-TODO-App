@@ -2,21 +2,29 @@ package com.oapps.woc.todoapp.DB;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
+import java.util.List;
+
 public class ToDoRepository {
     private TaskDao mTaskDao;
 
-    ToDoRepository(Application application) {
+    public ToDoRepository(Application application) {
         ToDoRoomDatabase db = ToDoRoomDatabase.getDatabase(application);
         mTaskDao = db.taskDao();
     }
 
-    void insertTask(TaskData task) {
+    public void insertTask(TaskData task) {
         ToDoRoomDatabase.databaseWriteExecutor.execute(() -> {
             mTaskDao.insert(task);
         });
     }
 
-    void updateTask(TaskData task){
+    public LiveData<List<TaskData>> getAllTasks() {
+        return mTaskDao.getAllTasks();
+    }
+
+    public void updateTask(TaskData task) {
         ToDoRoomDatabase.databaseWriteExecutor.execute(() -> {
             mTaskDao.update(task);
         });

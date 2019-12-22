@@ -1,11 +1,11 @@
 package com.oapps.woc.todoapp.DB;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -24,4 +24,7 @@ public interface TaskDao {
 
     @Query("SELECT * FROM tasks_table WHERE completed = 1 AND due_date > :after ORDER BY due_date DESC")
     List<TaskData> getCompletedTasksAfter(long after);
+
+    @Query("SELECT * FROM tasks_table")
+    LiveData<List<TaskData>> getAllTasks();
 }
