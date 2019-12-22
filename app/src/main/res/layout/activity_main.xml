@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
-    <include layout="@layout/take_note_bottom"
+    <include layout="@layout/bottom_make_list"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Create new list"
+        android:text="New list"
         android:textColor="#333"
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
