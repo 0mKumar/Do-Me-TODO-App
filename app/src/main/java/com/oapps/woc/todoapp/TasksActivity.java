@@ -19,15 +19,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.oapps.woc.todoapp.DB.TaskData;
 import com.oapps.woc.todoapp.DB.ToDoViewModel;
+import com.oapps.woc.todoapp.UI.TasksAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class TasksActivity extends AppCompatActivity {
@@ -37,6 +38,8 @@ public class TasksActivity extends AppCompatActivity {
     EditText taskEditText;
     FloatingActionButton fab;
     private ToDoViewModel todoViewModel;
+    RecyclerView recyclerView;
+    TasksAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +52,14 @@ public class TasksActivity extends AppCompatActivity {
 
         todoViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(ToDoViewModel.class);
 
-        todoViewModel.repository.getAllTasks().observe(this, new Observer<List<TaskData>>() {
-            @Override
-            public void onChanged(List<TaskData> taskData) {
-                Log.d("MyToDo", taskData.size() + " is curr size");
-            }
+        recyclerView = findViewById(R.id.tasks_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new TasksAdapter(this);
+        recyclerView.setAdapter(adapter);
+
+        todoViewModel.getAllTasks().observe(this, taskData -> {
+            Log.d("MyToDo", taskData.size() + " is curr size");
+            adapter.setDataset(taskData);
         });
 
         ImageView voiceInput = findViewById(R.id.voice_input);
@@ -163,4 +169,5 @@ public class TasksActivity extends AppCompatActivity {
                 break;
         }
     }
+
 }

@@ -1,6 +1,6 @@
 package com.oapps.woc.todoapp.UI;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class MainAdapter extends RecyclerView.Adapter<MainCategoryListViewHolder> {
     private ArrayList<TextWithDrawableData> mDataset;
-    private Context context;
+    private Activity context;
 
-    public MainAdapter(Context context, ArrayList<TextWithDrawableData> myDataset) {
+    public MainAdapter(Activity context, ArrayList<TextWithDrawableData> myDataset) {
         mDataset = myDataset;
         this.context = context;
     }

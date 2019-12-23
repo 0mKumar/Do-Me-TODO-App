@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="0dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="1dp"
+    app:cardBackgroundColor="#FFF"
+    app:cardCornerRadius="4dp"
+    android:layout_width="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/radio"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:padding="16dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_radio_button_unchecked_24dp"
+            android:tint="#888" />
+
+        <ImageView
+            android:layout_alignParentEnd="true"
+            android:id="@+id/star"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:padding="18dp"
+            android:src="@drawable/ic_star_border_24dp"
+            android:tint="#888"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <LinearLayout
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:minHeight="62dp"
+            android:layout_toEndOf="@id/radio"
+            android:layout_marginEnd="56dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Item Title"
+                android:textColor="#333"
+                android:textSize="16sp" />
+
+            <TextView
+                android:visibility="gone"
+                android:textSize="13sp"
+                android:id="@+id/subtitle"
+                android:text="Due Today \u00b7 Tasks \u00b7 Tom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
