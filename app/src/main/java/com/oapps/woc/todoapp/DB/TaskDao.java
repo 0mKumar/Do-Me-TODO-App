@@ -17,13 +17,16 @@ public interface TaskDao {
     void update(TaskData date);
 
     @Query("SELECT * FROM tasks_table WHERE due_date < :time AND completed = 0 ORDER BY due_date ASC")
-    List<TaskData> getIncompleteTasksBeforeDate(long time);
+    LiveData<List<TaskData>> getIncompleteTasksBeforeDate(long time);
 
     @Query("SELECT * FROM tasks_table WHERE task_id = :id")
-    TaskData getTaskById(int id);
+    LiveData<TaskData> getTaskById(int id);
 
     @Query("SELECT * FROM tasks_table WHERE completed = 1 AND due_date > :after ORDER BY due_date DESC")
-    List<TaskData> getCompletedTasksAfter(long after);
+    LiveData<List<TaskData>> getCompletedTasksAfter(long after);
+
+    @Query("SELECT * FROM tasks_table WHERE starred = 1")
+    LiveData<List<TaskData>> getStarredTasks();
 
     @Query("SELECT * FROM tasks_table")
     LiveData<List<TaskData>> getAllTasks();

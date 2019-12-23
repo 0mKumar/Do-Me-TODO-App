@@ -18,4 +18,5 @@ public class TaskData {
     @ColumnInfo(name = "reminder")
     public Date reminderDate;
     boolean completed = false;
+    boolean starred = false;
 }

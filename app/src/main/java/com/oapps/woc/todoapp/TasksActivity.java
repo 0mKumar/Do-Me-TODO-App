@@ -19,16 +19,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.oapps.woc.todoapp.DB.TaskData;
 import com.oapps.woc.todoapp.DB.ToDoViewModel;
+import com.oapps.woc.todoapp.UI.DatePickerFragment;
 import com.oapps.woc.todoapp.UI.TasksAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class TasksActivity extends AppCompatActivity {
@@ -48,7 +56,9 @@ public class TasksActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent incomingIntent = getIntent();
-        toolbar.setTitle(incomingIntent.getStringExtra("title"));
+        String title = incomingIntent.getStringExtra("title");
+        if (title == null) title = "Today";
+        toolbar.setTitle(title);
 
         todoViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(ToDoViewModel.class);
 
@@ -57,7 +67,21 @@ public class TasksActivity extends AppCompatActivity {
         adapter = new TasksAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        todoViewModel.getAllTasks().observe(this, taskData -> {
+
+        LiveData<List<TaskData>> titleTaskList;
+        switch (title) {
+            default:
+            case "Today":
+                titleTaskList = todoViewModel.getTasksToday();
+                break;
+            case "Home":
+                titleTaskList = todoViewModel.getStarredTasks();
+                break;
+            case "Snoozed":
+                titleTaskList = todoViewModel.getAllTasks();
+                break;
+        }
+        titleTaskList.observe(this, taskData -> {
             Log.d("MyToDo", taskData.size() + " is curr size");
             adapter.setDataset(taskData);
         });
@@ -73,6 +97,32 @@ public class TasksActivity extends AppCompatActivity {
             } catch (ActivityNotFoundException a) {
 
             }
+        });
+
+        Chip dueDateChip = findViewById(R.id.due_date);
+        dueDateChip.setOnClickListener(view -> {
+            Calendar calendar = (Calendar) dueDateChip.getTag();
+            DialogFragment dialog = new DatePickerFragment(TasksActivity.this, calendar, (datePicker, y, m, d) -> {
+                Log.d("MyTodo", d + "/" + m + "/" + y);
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.YEAR, y);
+                c.set(Calendar.MONTH, m);
+                c.set(Calendar.DAY_OF_MONTH, d);
+                c.set(Calendar.HOUR_OF_DAY, 0);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+                c.set(Calendar.MILLISECOND, 0);
+                SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM", Locale.getDefault());
+                dueDateChip.setText("Due " + sdf.format(c.getTime()));
+                dueDateChip.setTag(c);
+                dueDateChip.setCloseIconVisible(true);
+            });
+            dialog.show(getSupportFragmentManager(), "datePicker");
+        });
+        dueDateChip.setOnCloseIconClickListener(view -> {
+            dueDateChip.setCloseIconVisible(false);
+            dueDateChip.setText("Due date");
+            dueDateChip.setTag(null);
         });
 
         bottomTakeTask = findViewById(R.id.bottom_task_layout);
@@ -113,7 +163,12 @@ public class TasksActivity extends AppCompatActivity {
         addTaskButton.setOnClickListener(view -> {
             TaskData data = new TaskData();
             data.title = taskEditText.getText().toString();
+            Calendar c = (Calendar) dueDateChip.getTag();
+            if (c != null) {
+                data.dueDate = c.getTime();
+            }
             todoViewModel.repository.insertTask(data);
+            Snackbar.make(recyclerView, "Task added", Snackbar.LENGTH_SHORT).show();
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

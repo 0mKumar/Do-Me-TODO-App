@@ -60,10 +60,13 @@
         app:chipSpacing="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        style="@style/Widget.MaterialComponents.ChipGroup"
         android:layout_height="wrap_content">
 
         <com.google.android.material.chip.Chip
             android:text="Due date"
+            android:id="@+id/due_date"
+            app:closeIconEnabled="false"
             app:chipIcon="@drawable/ic_date_range_24dp"
             app:chipIconTint="@color/colorPrimary"
             app:chipBackgroundColor="@color/chip_background"

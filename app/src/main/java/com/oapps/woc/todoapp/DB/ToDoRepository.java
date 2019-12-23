@@ -24,6 +24,13 @@ public class ToDoRepository {
         return mTaskDao.getAllTasks();
     }
 
+    public LiveData<List<TaskData>> getTasksToday(long timeMidNight) {
+        return mTaskDao.getIncompleteTasksBeforeDate(timeMidNight);
+    }
+
+    public LiveData<List<TaskData>> getStarredTasks() {
+        return mTaskDao.getStarredTasks();
+    }
     public void updateTask(TaskData task) {
         ToDoRoomDatabase.databaseWriteExecutor.execute(() -> {
             mTaskDao.update(task);
