@@ -7,14 +7,14 @@
     android:layout_marginBottom="1dp"
     app:cardBackgroundColor="#FFF"
     app:cardCornerRadius="4dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_width="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/radio"
@@ -59,7 +59,6 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:visibility="gone"
                 android:textSize="13sp"
                 android:id="@+id/subtitle"
                 android:text="Due Today \u00b7 Tasks \u00b7 Tom"

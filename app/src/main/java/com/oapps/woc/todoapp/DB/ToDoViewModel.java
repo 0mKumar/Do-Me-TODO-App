@@ -45,4 +45,8 @@ public class ToDoViewModel extends AndroidViewModel {
     public LiveData<List<TaskData>> getStarredTasks() {
         return starredTasks;
     }
+
+    public LiveData<TaskData> getTaskById(int id) {
+        return repository.getTaskById(id);
+    }
 }

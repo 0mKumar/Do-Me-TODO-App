@@ -36,4 +36,8 @@ public class ToDoRepository {
             mTaskDao.update(task);
         });
     }
+
+    public LiveData<TaskData> getTaskById(int id) {
+        return mTaskDao.getTaskById(id);
+    }
 }
