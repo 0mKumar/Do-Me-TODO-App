@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.oapps.woc.todoapp.DB.TaskData;
 import com.oapps.woc.todoapp.DB.ToDoViewModel;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class TaskDetailsActivity extends AppCompatActivity {
 
     private ToDoViewModel todoViewModel;
@@ -24,6 +29,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     EditText taskEdit;
     ImageView starImageView;
     ImageView completedButton;
+    TextView dueTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         taskEdit = findViewById(R.id.take_task_edit);
         starImageView = findViewById(R.id.image_view_star);
         completedButton = findViewById(R.id.completed_button);
+        dueTextView = findViewById(R.id.tv_due_date);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,8 +56,14 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 starImageView.setImageResource(task.starred ? R.drawable.ic_star_24dp : R.drawable.ic_star_border_24dp);
                 completedButton.setImageResource(taskData.completed ? R.drawable.ic_radio_button_checked_24dp : R.drawable.ic_radio_button_unchecked_24dp);
                 completedButton.getDrawable().setTint(getResources().getColor(taskData.completed ? R.color.colorPrimary : R.color.star_grey));
+                if (task.dueDate != null) {
+                    Date now = Calendar.getInstance().getTime();
+                    CharSequence dueString = DateUtils.getRelativeTimeSpanString(task.dueDate.getTime(), now.getTime(), DateUtils.DAY_IN_MILLIS);
+                    dueTextView.setText(String.format("Due %s", dueString));
+                } else {
+                    dueTextView.setText("Set due date");
+                }
                 tasklive.removeObservers(owner);
-
             });
         }
         starImageView.setOnClickListener(view -> {

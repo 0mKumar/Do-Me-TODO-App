@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     void initializeMainList(){
         listElements.add(new TextWithDrawableData("Today", R.drawable.ic_sun_24dp));
         listElements.add(new TextWithDrawableData("Work", R.drawable.ic_work_24dp));
-        listElements.add(new TextWithDrawableData("Home", R.drawable.ic_home_24dp));
+        listElements.add(new TextWithDrawableData("Important", R.drawable.ic_star_24dp));
         listElements.add(new TextWithDrawableData("Pending", R.drawable.ic_assignment_late_24dp));
         listElements.add(new TextWithDrawableData("Snoozed", R.drawable.ic_snooze_24dp));
     }

@@ -74,7 +74,7 @@ public class TasksActivity extends AppCompatActivity {
             case "Today":
                 titleTaskList = todoViewModel.getTasksToday();
                 break;
-            case "Home":
+            case "Important":
                 titleTaskList = todoViewModel.getStarredTasks();
                 break;
             case "Snoozed":

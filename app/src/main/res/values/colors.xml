@@ -9,4 +9,5 @@
     <color name="chip_background">#F8F0FA</color>
     <color name="star_yellow">#FFA000</color>
     <color name="star_grey">#858484</color>
+    <color name="due_date">#303F9F</color>
 </resources>
