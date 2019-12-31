@@ -7,4 +7,6 @@
     <color name="gray_icon">#636363</color>
     <color name="chip_ripple">#EBC4F5</color>
     <color name="chip_background">#F8F0FA</color>
+    <color name="star_yellow">#FFA000</color>
+    <color name="star_grey">#858484</color>
 </resources>

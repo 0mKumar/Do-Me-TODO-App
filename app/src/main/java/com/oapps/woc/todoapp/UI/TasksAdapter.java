@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oapps.woc.todoapp.DB.TaskData;
+import com.oapps.woc.todoapp.DB.ToDoRepository;
 import com.oapps.woc.todoapp.R;
 import com.oapps.woc.todoapp.TaskDetailsActivity;
 
@@ -24,9 +25,11 @@ import java.util.List;
 public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> {
     private List<TaskData> mDataset;
     private Context context;
+    private ToDoRepository repository;
 
-    public TasksAdapter(Context context) {
+    public TasksAdapter(Context context, ToDoRepository repo) {
         this.context = context;
+        repository = repo;
     }
 
     public void setDataset(List<TaskData> data) {
@@ -45,11 +48,15 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TasksViewHolder holder, int position) {
+        TaskData data = mDataset.get(position);
         holder.title.setText(mDataset.get(position).title);
         holder.subTitle.setVisibility(View.VISIBLE);
+        holder.star.setImageResource(data.starred ? R.drawable.ic_star_24dp : R.drawable.ic_star_border_24dp);
+        holder.radio.setImageResource(data.completed ? R.drawable.ic_radio_button_checked_24dp : R.drawable.ic_radio_button_unchecked_24dp);
+        holder.radio.getDrawable().setTint(context.getResources().getColor(data.completed ? R.color.colorPrimary : R.color.star_grey));
         SpannableStringBuilder ssb = new SpannableStringBuilder();
         ImageSpan sp = new ImageSpan(context, R.drawable.ic_today_24dp);
-        sp.getDrawable().setTint(context.getResources().getColor(R.color.colorAccent));
+        sp.getDrawable().setTint(context.getResources().getColor(R.color.colorPrimary));
         ssb.append(" ");
         ssb.setSpan(sp, ssb.length() - 1, ssb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); //put the image to the prepared space
         ssb.append(" Today");
@@ -67,7 +74,12 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> {
             context.startActivity(intent);
         });
         holder.star.setOnClickListener((view) -> {
-
+            data.starred = !data.starred;
+            repository.updateTask(data);
+        });
+        holder.radio.setOnClickListener(view -> {
+            data.completed = !data.completed;
+            repository.updateTask(data);
         });
     }
 

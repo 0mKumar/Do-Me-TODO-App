@@ -24,8 +24,7 @@
             android:focusable="true"
             android:clickable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_radio_button_unchecked_24dp"
-            android:tint="#888" />
+            android:src="@drawable/ic_radio_button_unchecked_24dp" />
 
         <ImageView
             android:layout_alignParentEnd="true"
@@ -34,7 +33,6 @@
             android:layout_height="62dp"
             android:padding="18dp"
             android:src="@drawable/ic_star_border_24dp"
-            android:tint="#888"
             android:focusable="true"
             android:clickable="true"
             android:background="?attr/selectableItemBackgroundBorderless" />

@@ -64,7 +64,7 @@ public class TasksActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.tasks_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TasksAdapter(this);
+        adapter = new TasksAdapter(this, todoViewModel.repository);
         recyclerView.setAdapter(adapter);
 
 
