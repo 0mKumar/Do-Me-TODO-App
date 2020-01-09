@@ -25,7 +25,7 @@ public class ToDoRepository {
     }
 
     public LiveData<List<TaskData>> getTasksToday(long timeMidNight) {
-        return mTaskDao.getIncompleteTasksBeforeDate(timeMidNight);
+        return mTaskDao.getIncompleteTasksBetweenDate(timeMidNight - 24 * 60 * 60 * 1000, timeMidNight);
     }
 
     public LiveData<List<TaskData>> getStarredTasks() {
@@ -39,5 +39,9 @@ public class ToDoRepository {
 
     public LiveData<TaskData> getTaskById(int id) {
         return mTaskDao.getTaskById(id);
+    }
+
+    public LiveData<List<TaskData>> getPendingTasks(long time) {
+        return mTaskDao.getIncompleteTasksBeforeDate(time);
     }
 }

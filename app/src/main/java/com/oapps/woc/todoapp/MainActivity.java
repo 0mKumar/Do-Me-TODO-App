@@ -38,11 +38,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initializeMainList(){
-        listElements.add(new TextWithDrawableData("Today", R.drawable.ic_sun_24dp));
-        listElements.add(new TextWithDrawableData("Work", R.drawable.ic_work_24dp));
-        listElements.add(new TextWithDrawableData("Important", R.drawable.ic_star_24dp));
-        listElements.add(new TextWithDrawableData("Pending", R.drawable.ic_assignment_late_24dp));
-        listElements.add(new TextWithDrawableData("Snoozed", R.drawable.ic_snooze_24dp));
+        listElements.add(new TextWithDrawableData(TasksActivity.TODAY, R.drawable.ic_sun_24dp));
+//        listElements.add(new TextWithDrawableData("Work", R.drawable.ic_work_24dp));
+        listElements.add(new TextWithDrawableData(TasksActivity.IMPORTANT, R.drawable.ic_star_24dp));
+        listElements.add(new TextWithDrawableData(TasksActivity.PENDING, R.drawable.ic_assignment_late_24dp));
+        listElements.add(new TextWithDrawableData(TasksActivity.ALL_TASKS, R.drawable.ic_all_tasks_24dp));
+//        listElements.add(new TextWithDrawableData("Snoozed", R.drawable.ic_snooze_24dp));
     }
 
 

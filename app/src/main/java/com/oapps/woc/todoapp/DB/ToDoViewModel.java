@@ -14,6 +14,7 @@ public class ToDoViewModel extends AndroidViewModel {
     private LiveData<List<TaskData>> allTasks;
     private LiveData<List<TaskData>> starredTasks;
     private LiveData<List<TaskData>> tasksToday;
+    private LiveData<List<TaskData>> pendingTasks;
 //    private LiveData<List<TaskData>> tasksPlanned;
 
 
@@ -29,6 +30,7 @@ public class ToDoViewModel extends AndroidViewModel {
         date.set(Calendar.MINUTE, 0);
         date.set(Calendar.SECOND, 0);
         date.set(Calendar.MILLISECOND, 0);
+        pendingTasks = repository.getPendingTasks(date.getTime().getTime());
         // next day
         date.add(Calendar.DAY_OF_MONTH, 1);
         tasksToday = repository.getTasksToday(date.getTime().getTime());
@@ -48,5 +50,9 @@ public class ToDoViewModel extends AndroidViewModel {
 
     public LiveData<TaskData> getTaskById(int id) {
         return repository.getTaskById(id);
+    }
+
+    public LiveData<List<TaskData>> getPendingTasks() {
+        return pendingTasks;
     }
 }

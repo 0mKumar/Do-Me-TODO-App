@@ -33,9 +33,9 @@ import com.oapps.woc.todoapp.DB.ToDoViewModel;
 import com.oapps.woc.todoapp.UI.DatePickerFragment;
 import com.oapps.woc.todoapp.UI.TasksAdapter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,6 +49,13 @@ public class TasksActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TasksAdapter adapter;
 
+    static final String TODAY = "Today";
+    static final String IMPORTANT = "Important";
+    static final String PENDING = "Pending";
+    static final String ALL_TASKS = "All Tasks";
+
+    private String title;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +63,8 @@ public class TasksActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent incomingIntent = getIntent();
-        String title = incomingIntent.getStringExtra("title");
-        if (title == null) title = "Today";
+        title = incomingIntent.getStringExtra("title");
+        if (title == null) title = TODAY;
         toolbar.setTitle(title);
 
         todoViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(ToDoViewModel.class);
@@ -71,14 +78,17 @@ public class TasksActivity extends AppCompatActivity {
         LiveData<List<TaskData>> titleTaskList;
         switch (title) {
             default:
-            case "Today":
+            case TODAY:
                 titleTaskList = todoViewModel.getTasksToday();
                 break;
-            case "Important":
+            case IMPORTANT:
                 titleTaskList = todoViewModel.getStarredTasks();
                 break;
-            case "Snoozed":
+            case ALL_TASKS:
                 titleTaskList = todoViewModel.getAllTasks();
+                break;
+            case PENDING:
+                titleTaskList = todoViewModel.getPendingTasks();
                 break;
         }
         titleTaskList.observe(this, taskData -> {
@@ -105,6 +115,7 @@ public class TasksActivity extends AppCompatActivity {
             DialogFragment dialog = new DatePickerFragment(TasksActivity.this, calendar, (datePicker, y, m, d) -> {
                 Log.d("MyTodo", d + "/" + m + "/" + y);
                 Calendar c = Calendar.getInstance();
+                Date now = c.getTime();
                 c.set(Calendar.YEAR, y);
                 c.set(Calendar.MONTH, m);
                 c.set(Calendar.DAY_OF_MONTH, d);
@@ -112,8 +123,7 @@ public class TasksActivity extends AppCompatActivity {
                 c.set(Calendar.MINUTE, 0);
                 c.set(Calendar.SECOND, 0);
                 c.set(Calendar.MILLISECOND, 0);
-                SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM", Locale.getDefault());
-                dueDateChip.setText("Due " + sdf.format(c.getTime()));
+                dueDateChip.setText(String.format("Due %s", Utils.getDateFormatted(now, c.getTime())));
                 dueDateChip.setTag(c);
                 dueDateChip.setCloseIconVisible(true);
             });
@@ -152,6 +162,18 @@ public class TasksActivity extends AppCompatActivity {
 
         fab.setOnClickListener(view -> {
             fab.hide();
+            if (TODAY.equals(title)) {
+                Calendar c = Calendar.getInstance();
+                Date now = c.getTime();
+                c.set(Calendar.HOUR_OF_DAY, 0);
+                c.set(Calendar.MINUTE, 0);
+                c.set(Calendar.SECOND, 0);
+                c.set(Calendar.MILLISECOND, 0);
+//                c.add(Calendar.DAY_OF_MONTH, 1);
+                dueDateChip.setTag(c);
+                dueDateChip.setText(String.format("Due %s", Utils.getDateFormatted(now, c.getTime())));
+                dueDateChip.setCloseIconVisible(true);
+            }
             bottomTakeTask.setVisibility(LinearLayout.VISIBLE);
             taskEditText.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -166,6 +188,9 @@ public class TasksActivity extends AppCompatActivity {
             Calendar c = (Calendar) dueDateChip.getTag();
             if (c != null) {
                 data.dueDate = c.getTime();
+            }
+            if (IMPORTANT.equals(title)) {
+                data.starred = true;
             }
             todoViewModel.repository.insertTask(data);
             Snackbar.make(recyclerView, "Task added", Snackbar.LENGTH_SHORT).show();

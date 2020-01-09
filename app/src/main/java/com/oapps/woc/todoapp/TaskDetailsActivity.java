@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -12,12 +12,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.oapps.woc.todoapp.DB.TaskData;
 import com.oapps.woc.todoapp.DB.ToDoViewModel;
+import com.oapps.woc.todoapp.UI.DatePickerFragment;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -58,8 +60,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 completedButton.getDrawable().setTint(getResources().getColor(taskData.completed ? R.color.colorPrimary : R.color.star_grey));
                 if (task.dueDate != null) {
                     Date now = Calendar.getInstance().getTime();
-                    CharSequence dueString = DateUtils.getRelativeTimeSpanString(task.dueDate.getTime(), now.getTime(), DateUtils.DAY_IN_MILLIS);
-                    dueTextView.setText(String.format("Due %s", dueString));
+                    dueTextView.setText(String.format("Due %s", Utils.getDateFormatted(now, task.dueDate)));
                 } else {
                     dueTextView.setText("Set due date");
                 }
@@ -95,8 +96,27 @@ public class TaskDetailsActivity extends AppCompatActivity {
     }
 
     public void viewOnDueDateClicked(View view) {
-
+        Calendar calendar = Calendar.getInstance();
+        if (taskData.dueDate != null) {
+            calendar.setTime(taskData.dueDate);
+        }
+        DialogFragment dialog = new DatePickerFragment(TaskDetailsActivity.this, calendar, (datePicker, y, m, d) -> {
+            Log.d("MyTodo", d + "/" + m + "/" + y);
+            Calendar c = Calendar.getInstance();
+            Date now = c.getTime();
+            c.set(Calendar.YEAR, y);
+            c.set(Calendar.MONTH, m);
+            c.set(Calendar.DAY_OF_MONTH, d);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+            taskData.dueDate = c.getTime();
+            dueTextView.setText(String.format("Due %s", Utils.getDateFormatted(now, c.getTime())));
+        });
+        dialog.show(getSupportFragmentManager(), "datePicker");
     }
+
 
     public void viewOnRepeatClicked(View view) {
 
