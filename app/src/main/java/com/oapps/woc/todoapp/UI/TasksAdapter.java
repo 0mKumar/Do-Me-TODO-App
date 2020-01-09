@@ -2,6 +2,8 @@ package com.oapps.woc.todoapp.UI;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateUtils;
@@ -20,6 +22,7 @@ import com.oapps.woc.todoapp.DB.TaskData;
 import com.oapps.woc.todoapp.DB.ToDoRepository;
 import com.oapps.woc.todoapp.R;
 import com.oapps.woc.todoapp.TaskDetailsActivity;
+import com.oapps.woc.todoapp.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -53,6 +56,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> {
     public void onBindViewHolder(@NonNull TasksViewHolder holder, int position) {
         TaskData data = mDataset.get(position);
         holder.title.setText(mDataset.get(position).title);
+        if (data.completed) {
+            holder.card.setCardBackgroundColor(context.getResources().getColor(R.color.card_done));
+            holder.title.setPaintFlags(holder.title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.card.setCardBackgroundColor(Color.WHITE);
+            holder.title.setPaintFlags(holder.title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
         holder.subTitle.setVisibility(View.VISIBLE);
         holder.star.setImageResource(data.starred ? R.drawable.ic_star_24dp : R.drawable.ic_star_border_24dp);
         holder.radio.setImageResource(data.completed ? R.drawable.ic_radio_button_checked_24dp : R.drawable.ic_radio_button_unchecked_24dp);
@@ -60,15 +70,15 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> {
         SpannableStringBuilder ssb = new SpannableStringBuilder();
         ImageSpan sp;
         if (data.dueDate != null) {
+            Date now = Utils.getCalenderDayForDate(Calendar.getInstance().getTime());
+            int color = data.dueDate.before(now) ? R.color.due_date_pending : R.color.due_date;
             sp = new ImageSpan(context, R.drawable.ic_today_24dp);
-            sp.getDrawable().setTint(context.getResources().getColor(R.color.due_date));
             ssb.append(" ");
             ssb.setSpan(sp, ssb.length() - 1, ssb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE); //put the image to the prepared space
-            Date now = Calendar.getInstance().getTime();
             CharSequence dueString = DateUtils.getRelativeTimeSpanString(data.dueDate.getTime(), now.getTime(), DateUtils.DAY_IN_MILLIS);
             ssb.append(" Due ");
             ssb.append(dueString);
-            ssb.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.due_date)), ssb.length() - (dueString.length() + 4), ssb.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            ssb.setSpan(new ForegroundColorSpan(context.getResources().getColor(color)), ssb.length() - (dueString.length() + 4), ssb.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             ssb.append(" ");
         }
 

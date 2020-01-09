@@ -103,7 +103,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         DialogFragment dialog = new DatePickerFragment(TaskDetailsActivity.this, calendar, (datePicker, y, m, d) -> {
             Log.d("MyTodo", d + "/" + m + "/" + y);
             Calendar c = Calendar.getInstance();
-            Date now = c.getTime();
+            Date now = Utils.getCalenderDayForDate(c.getTime());
             c.set(Calendar.YEAR, y);
             c.set(Calendar.MONTH, m);
             c.set(Calendar.DAY_OF_MONTH, d);

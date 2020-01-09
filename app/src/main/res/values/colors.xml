@@ -10,4 +10,7 @@
     <color name="star_yellow">#FFA000</color>
     <color name="star_grey">#858484</color>
     <color name="due_date">#303F9F</color>
+    <color name="card_done">#ECE7F1</color>
+    <color name="due_date_pending">#9F3030</color>
+    <color name="background_tasks">#C3A6F5</color>
 </resources>

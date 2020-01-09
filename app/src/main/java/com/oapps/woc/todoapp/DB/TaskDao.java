@@ -16,7 +16,7 @@ public interface TaskDao {
     @Update
     void update(TaskData date);
 
-    @Query("SELECT * FROM tasks_table WHERE due_date >= :time1 AND due_date <= :time2 AND completed = 0 ORDER BY due_date ASC")
+    @Query("SELECT * FROM tasks_table WHERE due_date >= :time1 AND due_date < :time2 AND completed = 0 ORDER BY due_date ASC")
     LiveData<List<TaskData>> getIncompleteTasksBetweenDate(long time1, long time2);
 
     @Query("SELECT * FROM tasks_table WHERE due_date < :time AND completed = 0 ORDER BY due_date ASC")

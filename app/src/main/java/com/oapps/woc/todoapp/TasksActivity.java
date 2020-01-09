@@ -115,7 +115,7 @@ public class TasksActivity extends AppCompatActivity {
             DialogFragment dialog = new DatePickerFragment(TasksActivity.this, calendar, (datePicker, y, m, d) -> {
                 Log.d("MyTodo", d + "/" + m + "/" + y);
                 Calendar c = Calendar.getInstance();
-                Date now = c.getTime();
+                Date now = Utils.getCalenderDayForDate(c.getTime());
                 c.set(Calendar.YEAR, y);
                 c.set(Calendar.MONTH, m);
                 c.set(Calendar.DAY_OF_MONTH, d);
@@ -164,7 +164,7 @@ public class TasksActivity extends AppCompatActivity {
             fab.hide();
             if (TODAY.equals(title)) {
                 Calendar c = Calendar.getInstance();
-                Date now = c.getTime();
+                Date now = Utils.getCalenderDayForDate(c.getTime());
                 c.set(Calendar.HOUR_OF_DAY, 0);
                 c.set(Calendar.MINUTE, 0);
                 c.set(Calendar.SECOND, 0);

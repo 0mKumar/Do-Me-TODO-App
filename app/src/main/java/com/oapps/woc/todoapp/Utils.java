@@ -24,7 +24,7 @@ public class Utils {
         }
     }
 
-    static Date getCalenderDayForDate(Date d) {
+    public static Date getCalenderDayForDate(Date d) {
         Calendar c = Calendar.getInstance();
         c.setTime(d);
         c.set(Calendar.HOUR_OF_DAY, 0);
