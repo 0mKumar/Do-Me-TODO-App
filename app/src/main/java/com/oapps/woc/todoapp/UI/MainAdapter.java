@@ -12,6 +12,7 @@ import com.oapps.woc.todoapp.R;
 import com.oapps.woc.todoapp.TasksActivity;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class MainAdapter extends RecyclerView.Adapter<MainCategoryListViewHolder> {
@@ -48,6 +49,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainCategoryListViewHolder
     public void onBindViewHolder(MainCategoryListViewHolder holder, final int position) {
         holder.textView.setText(mDataset.get(position).text);
         holder.imageView.setImageResource(mDataset.get(position).drawable);
+        holder.imageView.setColorFilter(context.getResources().getColor(mDataset.get(position).color));
+        holder.countPrimary.setText(String.format(Locale.US, "%d", mDataset.get(position).countPrimary));
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, TasksActivity.class);
             intent.putExtra("title", mDataset.get(position).text);

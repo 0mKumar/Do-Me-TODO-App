@@ -13,4 +13,7 @@
     <color name="card_done">#ECE7F1</color>
     <color name="due_date_pending">#9F3030</color>
     <color name="background_tasks">#C3A6F5</color>
+    <color name="today_icon">#26A69A</color>
+    <color name="pending_icon">#EF5350</color>
+    <color name="all_tasks_icon">#3949AB</color>
 </resources>

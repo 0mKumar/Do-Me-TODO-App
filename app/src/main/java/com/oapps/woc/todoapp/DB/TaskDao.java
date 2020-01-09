@@ -33,4 +33,11 @@ public interface TaskDao {
 
     @Query("SELECT * FROM tasks_table")
     LiveData<List<TaskData>> getAllTasks();
+
+    // all tasks, today, pending, starred
+    @Query("SELECT count(*) AS all_tasks, " +
+            "sum(case when due_date >= :yesterdayStart AND due_date < :todayStart AND completed = 0 then 1 else 0 end) AS tasks_today, " +
+            "sum(case when due_date < :todayStart AND completed = 0 then 1 else 0 end) AS pending_tasks, " +
+            "sum(case when starred = 1 then 1 else 0 end) AS starred_tasks FROM tasks_table")
+    LiveData<CountData> getCountsInTasks(long yesterdayStart, long todayStart);
 }

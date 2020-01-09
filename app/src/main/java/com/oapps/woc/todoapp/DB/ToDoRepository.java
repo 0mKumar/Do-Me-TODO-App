@@ -44,4 +44,8 @@ public class ToDoRepository {
     public LiveData<List<TaskData>> getPendingTasks(long time) {
         return mTaskDao.getIncompleteTasksBeforeDate(time);
     }
+
+    public LiveData<CountData> getTasksCounts(long timeTodayStart) {
+        return mTaskDao.getCountsInTasks(timeTodayStart - 24 * 60 * 60 * 1000, timeTodayStart);
+    }
 }

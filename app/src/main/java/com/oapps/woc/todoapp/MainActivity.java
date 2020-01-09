@@ -6,13 +6,18 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.oapps.woc.todoapp.DB.CountData;
+import com.oapps.woc.todoapp.DB.ToDoRepository;
 import com.oapps.woc.todoapp.UI.MainAdapter;
 import com.oapps.woc.todoapp.UI.TextWithDrawableData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,17 +40,29 @@ public class MainActivity extends AppCompatActivity {
         initializeMainList();
         mainAdapter = new MainAdapter(this, listElements);
         recyclerView.setAdapter(mainAdapter);
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_MONTH, 1);
+        Date d = Utils.getCalenderDayForDate(c.getTime());
+        ToDoRepository repo = new ToDoRepository(getApplication());
+        LiveData<CountData> countsOfTasks = repo.getTasksCounts(d.getTime());
+        countsOfTasks.observe(this, counts -> {
+            listElements.get(0).countPrimary = counts.tasks_today;
+            listElements.get(1).countPrimary = counts.starred_tasks;
+            listElements.get(2).countPrimary = counts.pending_tasks;
+            listElements.get(3).countPrimary = counts.all_tasks;
+            mainAdapter.notifyDataSetChanged();
+        });
     }
 
     void initializeMainList(){
-        listElements.add(new TextWithDrawableData(TasksActivity.TODAY, R.drawable.ic_sun_24dp));
+        listElements.add(new TextWithDrawableData(TasksActivity.TODAY, R.drawable.ic_sun_24dp, R.color.today_icon));
 //        listElements.add(new TextWithDrawableData("Work", R.drawable.ic_work_24dp));
-        listElements.add(new TextWithDrawableData(TasksActivity.IMPORTANT, R.drawable.ic_star_24dp));
-        listElements.add(new TextWithDrawableData(TasksActivity.PENDING, R.drawable.ic_assignment_late_24dp));
-        listElements.add(new TextWithDrawableData(TasksActivity.ALL_TASKS, R.drawable.ic_all_tasks_24dp));
+        listElements.add(new TextWithDrawableData(TasksActivity.IMPORTANT, R.drawable.ic_star_24dp, R.color.star_yellow));
+        listElements.add(new TextWithDrawableData(TasksActivity.PENDING, R.drawable.ic_assignment_late_24dp, R.color.pending_icon));
+        listElements.add(new TextWithDrawableData(TasksActivity.ALL_TASKS, R.drawable.ic_all_tasks_24dp, R.color.all_tasks_icon));
 //        listElements.add(new TextWithDrawableData("Snoozed", R.drawable.ic_snooze_24dp));
     }
-
 
 
     @Override

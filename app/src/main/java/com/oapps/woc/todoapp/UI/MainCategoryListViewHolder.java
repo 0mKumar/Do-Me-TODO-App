@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oapps.woc.todoapp.R;
 
 public class MainCategoryListViewHolder extends RecyclerView.ViewHolder {
-    TextView textView;
+    TextView textView, countPrimary;
     ImageView imageView;
 
     public MainCategoryListViewHolder(@NonNull View itemView) {
         super(itemView);
         textView = itemView.findViewById(R.id.textView);
         imageView = itemView.findViewById(R.id.imageView);
+        countPrimary = itemView.findViewById(R.id.countPrimary);
     }
 }
