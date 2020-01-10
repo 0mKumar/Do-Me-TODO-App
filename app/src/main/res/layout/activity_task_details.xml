@@ -165,16 +165,18 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <EditText
-                android:id="@+id/edit_add_note"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ffff"
-                android:elevation="1dp"
-                android:gravity="top"
-                android:hint="Add note"
-                android:lines="5"
-                android:padding="16dp" />
+                android:layout_margin="16dp"
+                android:hint="Add Note"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/edit_add_note"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

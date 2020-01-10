@@ -19,4 +19,5 @@ public class TaskData {
     public Date reminderDate;
     public boolean completed = false;
     public boolean starred = false;
+    public String note;
 }

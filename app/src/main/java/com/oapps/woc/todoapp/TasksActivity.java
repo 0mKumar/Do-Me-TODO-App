@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -74,6 +75,24 @@ public class TasksActivity extends AppCompatActivity {
         adapter = new TasksAdapter(this, todoViewModel.repository);
         recyclerView.setAdapter(adapter);
 
+        int color = R.color.background_tasks;
+        switch (title) {
+//            default:
+//            case TODAY:
+//                color = R.color.background_today;
+//                break;
+//            case IMPORTANT:
+//                color = R.color.background_important;
+//                break;
+//            case ALL_TASKS:
+//                color = R.color.background_tasks;
+//                break;
+            case PENDING:
+                color = R.color.background_pending;
+                break;
+        }
+        CoordinatorLayout layout = findViewById(R.id.tasks_layout);
+        layout.setBackgroundColor(getResources().getColor(color));
 
         LiveData<List<TaskData>> titleTaskList;
         switch (title) {
@@ -192,6 +211,7 @@ public class TasksActivity extends AppCompatActivity {
             if (IMPORTANT.equals(title)) {
                 data.starred = true;
             }
+            taskEditText.setText("");
             todoViewModel.repository.insertTask(data);
             Snackbar.make(recyclerView, "Task added", Snackbar.LENGTH_SHORT).show();
         });

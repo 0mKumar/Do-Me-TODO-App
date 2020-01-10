@@ -32,6 +32,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     ImageView starImageView;
     ImageView completedButton;
     TextView dueTextView;
+    EditText addNoteEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         starImageView = findViewById(R.id.image_view_star);
         completedButton = findViewById(R.id.completed_button);
         dueTextView = findViewById(R.id.tv_due_date);
+        addNoteEdit = findViewById(R.id.edit_add_note);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,12 +66,31 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 } else {
                     dueTextView.setText("Set due date");
                 }
+                if (task.note != null) {
+                    addNoteEdit.setText(task.note);
+                }
                 tasklive.removeObservers(owner);
             });
         }
         starImageView.setOnClickListener(view -> {
             taskData.starred = !taskData.starred;
             starImageView.setImageResource(taskData.starred ? R.drawable.ic_star_24dp : R.drawable.ic_star_border_24dp);
+        });
+        addNoteEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                taskData.note = s.toString();
+            }
         });
         taskEdit.addTextChangedListener(new TextWatcher() {
             @Override
