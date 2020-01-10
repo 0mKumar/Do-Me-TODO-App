@@ -45,12 +45,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
+        updateUI(account, false);
     }
 
-    private void updateUI(GoogleSignInAccount account) {
+    private void updateUI(GoogleSignInAccount account, boolean other) {
         findViewById(R.id.sign_in_button).setVisibility(account == null ? View.VISIBLE : View.INVISIBLE);
-        if (account != null) {
+        if (other || account != null) {
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 finish();
@@ -93,12 +93,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            updateUI(account);
+            updateUI(account, false);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
+            updateUI(null, true);
         }
     }
 }
