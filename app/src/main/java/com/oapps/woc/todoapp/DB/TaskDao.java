@@ -40,4 +40,7 @@ public interface TaskDao {
             "sum(case when due_date < :todayStart AND completed = 0 then 1 else 0 end) AS pending_tasks, " +
             "sum(case when starred = 1 then 1 else 0 end) AS starred_tasks FROM tasks_table")
     LiveData<CountData> getCountsInTasks(long yesterdayStart, long todayStart);
+
+    @Query("SELECT * FROM tasks_table WHERE task_id = :id")
+    TaskData getTaskByIdAsync(int id);
 }

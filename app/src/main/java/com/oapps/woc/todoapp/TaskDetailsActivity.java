@@ -52,6 +52,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Intent incomingIntent = getIntent();
         int task_id = incomingIntent.getIntExtra("task_id", -1);
+        Log.d("TaskDetailsActivity", "onCreate: task id = " + task_id);
         todoViewModel = new ViewModelProvider.AndroidViewModelFactory(getApplication()).create(ToDoViewModel.class);
 
         if (task_id != -1) {
@@ -177,8 +178,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                         Utils.getDateFormatted(now, reminderDate.getTime()),
                         Utils.getTimeFormatted(now, reminderDate.getTime())));
                 taskData.reminderDate = reminderDate.getTime();
-            }, currentDate.get(Calendar.HOUR_OF_DAY), 0, false).show();
+            }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
-
     }
 }

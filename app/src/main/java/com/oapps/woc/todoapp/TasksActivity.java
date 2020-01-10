@@ -237,6 +237,10 @@ public class TasksActivity extends AppCompatActivity {
             if (c != null) {
                 data.dueDate = c.getTime();
             }
+            Calendar r = (Calendar) reminderChip.getTag();
+            if (r != null) {
+                data.reminderDate = r.getTime();
+            }
             if (IMPORTANT.equals(title)) {
                 data.starred = true;
             }

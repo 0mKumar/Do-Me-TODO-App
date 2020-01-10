@@ -1,7 +1,13 @@
 package com.oapps.woc.todoapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.util.Log;
+
+import com.oapps.woc.todoapp.DB.TaskData;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +32,6 @@ public class Utils {
 //        long diff = date.getTime() - now.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
         return sdf.format(date);
-
     }
 
     public static Date getCalenderDayForDate(Date d) {
@@ -39,4 +44,12 @@ public class Utils {
         return c.getTime();
     }
 
+    public static void setOrUpdateAlarm(Context context, AlarmManager alarmManager, TaskData task) {
+        Intent intent = new Intent(context, MyEventAlarmReceiver.class);
+        intent.putExtra("task_id", task.task_id);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, task.task_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(alarmIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                task.reminderDate.getTime(), 24 * 60 * 60 * 1000, alarmIntent);
+    }
 }

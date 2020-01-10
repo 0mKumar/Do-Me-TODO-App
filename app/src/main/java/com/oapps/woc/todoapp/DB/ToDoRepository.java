@@ -1,23 +1,45 @@
 package com.oapps.woc.todoapp.DB;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
+
+import com.oapps.woc.todoapp.Utils;
 
 import java.util.List;
 
 public class ToDoRepository {
-    private TaskDao mTaskDao;
-
+    public TaskDao mTaskDao;
+    private AlarmManager alarmManager;
+    private Context context;
+    private Application application;
     public ToDoRepository(Application application) {
+        this.application = application;
+        context = application.getApplicationContext();
         ToDoRoomDatabase db = ToDoRoomDatabase.getDatabase(application);
+        alarmManager = (AlarmManager) application.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         mTaskDao = db.taskDao();
     }
 
     public void insertTask(TaskData task) {
-        
+        if (task.reminderDate != null) {
+            // set reminder
+            Utils.setOrUpdateAlarm(context, alarmManager, task);
+        }
         ToDoRoomDatabase.databaseWriteExecutor.execute(() -> {
             mTaskDao.insert(task);
+        });
+    }
+
+    public void updateTask(TaskData task) {
+        if (task.reminderDate != null) {
+            // set or update reminder
+            Utils.setOrUpdateAlarm(context, alarmManager, task);
+        }
+        ToDoRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mTaskDao.update(task);
         });
     }
 
@@ -31,11 +53,6 @@ public class ToDoRepository {
 
     public LiveData<List<TaskData>> getStarredTasks() {
         return mTaskDao.getStarredTasks();
-    }
-    public void updateTask(TaskData task) {
-        ToDoRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mTaskDao.update(task);
-        });
     }
 
     public LiveData<TaskData> getTaskById(int id) {
