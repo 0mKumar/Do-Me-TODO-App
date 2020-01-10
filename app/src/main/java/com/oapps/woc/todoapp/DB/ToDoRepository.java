@@ -14,9 +14,7 @@ public class ToDoRepository {
     public TaskDao mTaskDao;
     private AlarmManager alarmManager;
     private Context context;
-    private Application application;
     public ToDoRepository(Application application) {
-        this.application = application;
         context = application.getApplicationContext();
         ToDoRoomDatabase db = ToDoRoomDatabase.getDatabase(application);
         alarmManager = (AlarmManager) application.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
@@ -63,7 +61,7 @@ public class ToDoRepository {
         return mTaskDao.getIncompleteTasksBeforeDate(time);
     }
 
-    public LiveData<CountData> getTasksCounts(long timeTodayStart) {
-        return mTaskDao.getCountsInTasks(timeTodayStart - 24 * 60 * 60 * 1000, timeTodayStart);
+    public LiveData<CountData> getTasksCounts(long timeMidNight) {
+        return mTaskDao.getCountsInTasks(timeMidNight - 24 * 60 * 60 * 1000, timeMidNight);
     }
 }

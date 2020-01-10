@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal|bottom"
+    android:orientation="vertical"
+    android:background="#5C6BC0"
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:layout_marginBottom="120dp"
+        android:src="@drawable/ic_launcher_foreground"
+        android:layout_alignParentBottom="true"
+        android:layout_width="180dp"
+        android:background="@drawable/ic_radio_button_unchecked_24dp"
+        android:backgroundTint="#ffff"
+        android:layout_height="180dp" />
+
+    <TextView
+        android:text="Do Me!"
+        android:textColor="#ffff"
+        android:textSize="40sp"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginBottom="60dp"
+        android:text="To Do App"
+        android:textColor="#ffff"
+        android:textSize="20sp"
+        android:typeface="monospace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <com.google.android.gms.common.SignInButton
+        android:layout_marginBottom="120dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        app:buttonSize="wide"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -83,8 +83,8 @@ public class MyEventAlarmReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context.getApplicationContext(), channel_id);
 //        builder.setTicker(ticker);
         builder.setContentTitle("Reminder");
-
         builder.setContentText("Your task " + task.title + " is due " + Utils.getDateFormatted(Calendar.getInstance().getTime(), task.dueDate) + ".");
+        builder.setAutoCancel(true);
 
         builder.setSmallIcon(R.drawable.ic_notifications_24dp);
         builder.setContentIntent(p);
