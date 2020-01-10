@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -50,6 +51,12 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ActionBar supportActionBar = this.getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+//            supportActionBar.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
+        }
         Intent incomingIntent = getIntent();
         int task_id = incomingIntent.getIntExtra("task_id", -1);
         Log.d("TaskDetailsActivity", "onCreate: task id = " + task_id);
@@ -192,5 +199,11 @@ public class TaskDetailsActivity extends AppCompatActivity {
 //                .setNegativeButton(android.R.string.no, null).create();
         todoViewModel.repository.deleteTask(taskData);
         finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // close this activity as oppose to navigating up
+        return false;
     }
 }
