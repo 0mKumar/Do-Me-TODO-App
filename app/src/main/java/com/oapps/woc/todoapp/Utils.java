@@ -15,13 +15,18 @@ public class Utils {
         long diff = date.getTime() - now.getTime();
         Log.d("Utils", "" + diff);
         if (diff > -24 * 60 * 60 * 1000L && diff < 2 * 24 * 60 * 60 * 1000L) {
-            Log.d("Utils", "Printing date relative");
             return DateUtils.getRelativeTimeSpanString(date.getTime(), now.getTime(), DateUtils.DAY_IN_MILLIS);
         } else {
-            Log.d("Utils", "Printing date absolute");
             SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM", Locale.getDefault());
             return sdf.format(date);
         }
+    }
+
+    static CharSequence getTimeFormatted(Date now, Date date) {
+//        long diff = date.getTime() - now.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        return sdf.format(date);
+
     }
 
     public static Date getCalenderDayForDate(Date d) {
@@ -33,4 +38,5 @@ public class Utils {
         c.set(Calendar.MILLISECOND, 0);
         return c.getTime();
     }
+
 }

@@ -138,6 +138,44 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
+                    android:onClick="viewOnReminderClicked"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_reminder_date"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="14dp"
+                        android:src="@drawable/ic_notifications_24dp"
+                        android:tint="#444" />
+
+                    <TextView
+                        android:id="@+id/tv_reminder_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Reminds Fri, 6 Dec 3:00 AM"
+                        android:textColor="#444"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="1dp">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:onClick="viewOnRepeatClicked"
                     android:orientation="horizontal">
 

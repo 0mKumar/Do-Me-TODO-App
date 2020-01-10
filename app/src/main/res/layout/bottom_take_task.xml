@@ -55,32 +55,52 @@
             android:padding="12dp" />
     </LinearLayout>
 
-    <com.google.android.material.chip.ChipGroup
+    <HorizontalScrollView
+        android:scrollbars="none"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:clipToPadding="false"
         android:layout_width="match_parent"
-        app:chipSpacing="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        style="@style/Widget.MaterialComponents.ChipGroup"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.chip.Chip
-            android:text="Due date"
-            android:id="@+id/due_date"
-            app:closeIconEnabled="false"
-            app:chipIcon="@drawable/ic_date_range_24dp"
-            app:chipIconTint="@color/colorPrimary"
-            app:chipBackgroundColor="@color/chip_background"
-            app:rippleColor="@color/chip_ripple"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            app:chipSpacing="8dp"
+            android:clipToPadding="false"
+            app:singleLine="true"
+            style="@style/Widget.MaterialComponents.ChipGroup"
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.chip.Chip
-            android:text="Repeat"
-            app:chipIcon="@drawable/ic_repeat_24dp"
-            app:chipIconTint="@color/colorPrimary"
-            app:chipBackgroundColor="@color/chip_background"
-            app:rippleColor="@color/chip_ripple"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.chip.ChipGroup>
+            <com.google.android.material.chip.Chip
+                android:text="Due date"
+                android:id="@+id/due_date"
+                app:closeIconEnabled="false"
+                app:chipIcon="@drawable/ic_date_range_24dp"
+                app:chipIconTint="@color/colorPrimary"
+                app:chipBackgroundColor="@color/chip_background"
+                app:rippleColor="@color/chip_ripple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.chip.Chip
+                android:text="Set Reminder"
+                android:id="@+id/reminder"
+                app:closeIconEnabled="false"
+                app:chipIcon="@drawable/ic_notifications_24dp"
+                app:chipIconTint="@color/colorPrimary"
+                app:chipBackgroundColor="@color/chip_background"
+                app:rippleColor="@color/chip_ripple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.chip.Chip
+                android:text="Repeat"
+                app:chipIcon="@drawable/ic_repeat_24dp"
+                app:chipIconTint="@color/colorPrimary"
+                app:chipBackgroundColor="@color/chip_background"
+                app:rippleColor="@color/chip_ripple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
 </LinearLayout>

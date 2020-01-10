@@ -1,5 +1,7 @@
 package com.oapps.woc.todoapp;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -31,7 +33,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     EditText taskEdit;
     ImageView starImageView;
     ImageView completedButton;
-    TextView dueTextView;
+    TextView dueTextView, reminderTextView;
     EditText addNoteEdit;
 
     @Override
@@ -44,6 +46,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         completedButton = findViewById(R.id.completed_button);
         dueTextView = findViewById(R.id.tv_due_date);
         addNoteEdit = findViewById(R.id.edit_add_note);
+        reminderTextView = findViewById(R.id.tv_reminder_date);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -65,6 +68,14 @@ public class TaskDetailsActivity extends AppCompatActivity {
                     dueTextView.setText(String.format("Due %s", Utils.getDateFormatted(now, task.dueDate)));
                 } else {
                     dueTextView.setText("Set due date");
+                }
+                if (task.reminderDate != null) {
+                    Date now = Calendar.getInstance().getTime();
+                    reminderTextView.setText(String.format("Reminds %s %s",
+                            Utils.getDateFormatted(now, task.reminderDate),
+                            Utils.getTimeFormatted(now, task.reminderDate)));
+                } else {
+                    reminderTextView.setText("Set Reminder");
                 }
                 if (task.note != null) {
                     addNoteEdit.setText(task.note);
@@ -148,5 +159,26 @@ public class TaskDetailsActivity extends AppCompatActivity {
         ImageView iv = (ImageView) view;
         iv.setImageResource(taskData.completed ? R.drawable.ic_radio_button_checked_24dp : R.drawable.ic_radio_button_unchecked_24dp);
         iv.getDrawable().setTint(getResources().getColor(taskData.completed ? R.color.colorPrimary : R.color.star_grey));
+    }
+
+    public void viewOnReminderClicked(View v) {
+        Calendar currentDate = Calendar.getInstance();
+        if (taskData.reminderDate != null) {
+            currentDate.setTime(taskData.reminderDate);
+        }
+        Calendar reminderDate = Calendar.getInstance();
+        new DatePickerDialog(this, (view12, year, monthOfYear, dayOfMonth) -> {
+            reminderDate.set(year, monthOfYear, dayOfMonth);
+            new TimePickerDialog(TaskDetailsActivity.this, (view1, hourOfDay, minute) -> {
+                reminderDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                reminderDate.set(Calendar.MINUTE, minute);
+                Date now = Calendar.getInstance().getTime();
+                reminderTextView.setText(String.format("Reminds %s %s",
+                        Utils.getDateFormatted(now, reminderDate.getTime()),
+                        Utils.getTimeFormatted(now, reminderDate.getTime())));
+                taskData.reminderDate = reminderDate.getTime();
+            }, currentDate.get(Calendar.HOUR_OF_DAY), 0, false).show();
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
+
     }
 }

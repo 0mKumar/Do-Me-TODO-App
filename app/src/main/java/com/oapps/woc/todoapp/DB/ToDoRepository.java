@@ -15,6 +15,7 @@ public class ToDoRepository {
     }
 
     public void insertTask(TaskData task) {
+        
         ToDoRoomDatabase.databaseWriteExecutor.execute(() -> {
             mTaskDao.insert(task);
         });

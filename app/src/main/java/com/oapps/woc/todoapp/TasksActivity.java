@@ -1,5 +1,7 @@
 package com.oapps.woc.todoapp;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -56,6 +58,7 @@ public class TasksActivity extends AppCompatActivity {
     static final String ALL_TASKS = "All Tasks";
 
     private String title;
+    Calendar reminderDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +131,7 @@ public class TasksActivity extends AppCompatActivity {
             }
         });
 
+
         Chip dueDateChip = findViewById(R.id.due_date);
         dueDateChip.setOnClickListener(view -> {
             Calendar calendar = (Calendar) dueDateChip.getTag();
@@ -152,6 +156,31 @@ public class TasksActivity extends AppCompatActivity {
             dueDateChip.setCloseIconVisible(false);
             dueDateChip.setText("Due date");
             dueDateChip.setTag(null);
+        });
+
+        Chip reminderChip = findViewById(R.id.reminder);
+        reminderChip.setOnClickListener(view -> {
+            final Calendar currentDate = reminderChip.getTag() == null ? Calendar.getInstance() : (Calendar) reminderChip.getTag();
+            reminderDate = Calendar.getInstance();
+            new DatePickerDialog(this, (view12, year, monthOfYear, dayOfMonth) -> {
+                reminderDate.set(year, monthOfYear, dayOfMonth);
+                new TimePickerDialog(TasksActivity.this, (view1, hourOfDay, minute) -> {
+                    reminderDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    reminderDate.set(Calendar.MINUTE, minute);
+                    Date now = Calendar.getInstance().getTime();
+                    reminderChip.setText(String.format("Reminds %s %s",
+                            Utils.getDateFormatted(now, reminderDate.getTime()),
+                            Utils.getTimeFormatted(now, reminderDate.getTime())));
+                    reminderChip.setTag(reminderDate);
+                    reminderChip.setCloseIconVisible(true);
+                }, currentDate.get(Calendar.HOUR_OF_DAY), 0, false).show();
+            }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
+        });
+
+        reminderChip.setOnCloseIconClickListener(v -> {
+            reminderChip.setCloseIconVisible(false);
+            reminderChip.setText("Set Reminder");
+            reminderChip.setTag(null);
         });
 
         bottomTakeTask = findViewById(R.id.bottom_task_layout);
