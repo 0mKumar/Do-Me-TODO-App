@@ -181,4 +181,16 @@ public class TaskDetailsActivity extends AppCompatActivity {
             }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
     }
+
+    public void deleteClicked(View view) {
+//        AlertDialog alert = new AlertDialog.Builder(TaskDetailsActivity.this)
+//                .setTitle("Delete task")
+//                .setMessage("Are you sure you want to delete this task?")
+//                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+//
+//                })
+//                .setNegativeButton(android.R.string.no, null).create();
+        todoViewModel.repository.deleteTask(taskData);
+        finish();
+    }
 }

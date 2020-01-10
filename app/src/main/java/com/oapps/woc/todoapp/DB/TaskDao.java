@@ -2,6 +2,7 @@ package com.oapps.woc.todoapp.DB;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -43,4 +44,7 @@ public interface TaskDao {
 
     @Query("SELECT * FROM tasks_table WHERE task_id = :id")
     TaskData getTaskByIdAsync(int id);
+
+    @Delete
+    void delete(TaskData task);
 }

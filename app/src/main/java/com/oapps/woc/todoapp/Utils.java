@@ -56,4 +56,11 @@ public class Utils {
 //                task.reminderDate.getTime(), 24 * 60 * 60 * 1000, alarmIntent);
         alarmManager.set(AlarmManager.RTC_WAKEUP, task.reminderDate.getTime(), alarmIntent);
     }
+
+    public static void removeAlarm(Context context, AlarmManager alarmManager, TaskData task) {
+        Intent intent = new Intent(context, MyEventAlarmReceiver.class);
+        intent.putExtra("task_id", task.task_id);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, task.task_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(alarmIntent);
+    }
 }

@@ -31,6 +31,16 @@ public class ToDoRepository {
         });
     }
 
+    public void deleteTask(TaskData task) {
+        if (task.reminderDate != null) {
+            // set or update reminder
+            Utils.removeAlarm(context, alarmManager, task);
+        }
+        ToDoRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mTaskDao.delete(task);
+        });
+    }
+
     public void updateTask(TaskData task) {
         if (task.reminderDate != null) {
             // set or update reminder
